@@ -21,14 +21,14 @@
 #define MAX_LINES 400
 #define GPS_BAUD 9600
 
-int count = 0;
-const int deviceId = 13;
+// int count = 0;
+// const int deviceId = 13;
 
-const char *ssid = "RedmiNote12";
-const char *password = "11111111";
-const char *filename = "/data.txt";
-const String mongodbstring = "mongodb+srv://ssasindu120:b8WUn44WwJFYgl2U@cluster0.82qxix2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-const char *serverName = "http://192.168.8.116:3000/upload";
+// const char *ssid = "RedmiNote12";
+// const char *password = "11111111";
+// const char *filename = "/data.txt";
+// const String mongodbstring = "mongodb+srv://ssasindu120:b8WUn44WwJFYgl2U@cluster0.82qxix2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+// const char *serverName = "http://192.168.8.116:3000/upload";
 
 TinyGPSPlus gps;
 MPU6050 mpu;
@@ -68,139 +68,139 @@ public:
 };
 
 // Functions for SD card write
-void readFile(fs::FS &fs, const char *path)
-{
-  Serial.printf("Reading file: %s\n", path);
+// void readFile(fs::FS &fs, const char *path)
+// {
+//   Serial.printf("Reading file: %s\n", path);
 
-  File file = fs.open(path);
-  if (!file)
-  {
-    Serial.println("Failed to open file for reading");
-    return;
-  }
+//   File file = fs.open(path);
+//   if (!file)
+//   {
+//     Serial.println("Failed to open file for reading");
+//     return;
+//   }
 
-  Serial.print("Read from file: ");
-  while (file.available())
-  {
-    Serial.write(file.read());
-  }
-  file.close();
-}
+//   Serial.print("Read from file: ");
+//   while (file.available())
+//   {
+//     Serial.write(file.read());
+//   }
+//   file.close();
+// }
 
-void writeFile(fs::FS &fs, const char *path, const char *message)
-{
-  Serial.printf("Writing file: %s\n", path);
+// void writeFile(fs::FS &fs, const char *path, const char *message)
+// {
+//   Serial.printf("Writing file: %s\n", path);
 
-  File file = fs.open(path, FILE_WRITE);
-  if (!file)
-  {
-    Serial.println("Failed to open file for writing");
-    return;
-  }
-  if (file.println(message))
-  {
-    Serial.println("File written");
-  }
-  else
-  {
-    Serial.println("Write failed");
-  }
-  file.close();
-}
+//   File file = fs.open(path, FILE_WRITE);
+//   if (!file)
+//   {
+//     Serial.println("Failed to open file for writing");
+//     return;
+//   }
+//   if (file.println(message))
+//   {
+//     Serial.println("File written");
+//   }
+//   else
+//   {
+//     Serial.println("Write failed");
+//   }
+//   file.close();
+// }
 
-void logDataToSD(float ax, float ay, float az, float speed, String date, String time)
-{
-  File file = SD.open("/data.txt", FILE_APPEND);
-  StaticJsonDocument<200> doc;
-  doc["deviceId"] = deviceId;
-  doc["date"] = date;
-  doc["time"] = time;
-  doc["accX"] = ax;
-  doc["accY"] = ay;
-  doc["accZ"] = az;
-  doc["speed"] = speed;
-  String json;
-  serializeJson(doc, json);
+// void logDataToSD(float ax, float ay, float az, float speed, String date, String time)
+// {
+//   File file = SD.open("/data.txt", FILE_APPEND);
+//   StaticJsonDocument<200> doc;
+//   doc["deviceId"] = deviceId;
+//   doc["date"] = date;
+//   doc["time"] = time;
+//   doc["accX"] = ax;
+//   doc["accY"] = ay;
+//   doc["accZ"] = az;
+//   doc["speed"] = speed;
+//   String json;
+//   serializeJson(doc, json);
 
-  // appendFile(SD, "/data.txt", json)
-  if (file)
-  {
-    file.println(json);
-    file.close();
-    Serial.println("Data logged.");
-  }
-  else
-  {
-    Serial.println("Failed to open file.");
-  }
-}
+//   // appendFile(SD, "/data.txt", json)
+//   if (file)
+//   {
+//     file.println(json);
+//     file.close();
+//     Serial.println("Data logged.");
+//   }
+//   else
+//   {
+//     Serial.println("Failed to open file.");
+//   }
+// }
 
-String readFileToJsonArray()
-{
-  File file = SD.open("/data.txt", FILE_READ);
-  if (!file)
-  {
-    Serial.println("Failed to open file");
-    return "";
-  }
+// String readFileToJsonArray()
+// {
+//   File file = SD.open("/data.txt", FILE_READ);
+//   if (!file)
+//   {
+//     Serial.println("Failed to open file");
+//     return "";
+//   }
 
-  String jsonPayload = "[";
+//   String jsonPayload = "[";
 
-  while (file.available())
-  {
-    String line = file.readStringUntil('\n');
-    line.trim();
-    if (line.length() == 0)
-      continue;
+//   while (file.available())
+//   {
+//     String line = file.readStringUntil('\n');
+//     line.trim();
+//     if (line.length() == 0)
+//       continue;
 
-    bool first = true;
-    while (file.available())
-    {
-      String line = file.readStringUntil('\n');
-      line.trim();
-      if (line.length() == 0) continue;
+//     bool first = true;
+//     while (file.available())
+//     {
+//       String line = file.readStringUntil('\n');
+//       line.trim();
+//       if (line.length() == 0) continue;
       
-      if (!first) jsonPayload += ",";
-      jsonPayload += line;
-      first = false;  
-    }
-  }
-  jsonPayload += "]";
-  file.close();
+//       if (!first) jsonPayload += ",";
+//       jsonPayload += line;
+//       first = false;  
+//     }
+//   }
+//   jsonPayload += "]";
+//   file.close();
 
-  return jsonPayload;
-}
+//   return jsonPayload;
+// }
 
-void sendSDDataToServer()
-{
-  if (WiFi.status() != WL_CONNECTED)
-  {
-    Serial.println("WiFi not connected");
-    return;
-  }
+// void sendSDDataToServer()
+// {
+//   if (WiFi.status() != WL_CONNECTED)
+//   {
+//     Serial.println("WiFi not connected");
+//     return;
+//   }
 
-  String jsonString = readFileToJsonArray();
+//   String jsonString = readFileToJsonArray();
 
-  HTTPClient http;
-  http.begin(serverName);
-  http.addHeader("Content-Type", "application/json");
+//   HTTPClient http;
+//   http.begin(serverName);
+//   http.addHeader("Content-Type", "application/json");
 
-  int httpCode = http.POST(jsonString);
-  String response = http.getString();
+//   int httpCode = http.POST(jsonString);
+//   String response = http.getString();
 
-  Serial.print("Response code: ");
-  Serial.println(httpCode);
-  Serial.println("Response: " + response);
+//   Serial.print("Response code: ");
+//   Serial.println(httpCode);
+//   Serial.println("Response: " + response);
 
-  if (httpCode == 200)
-  {
-    if (response.indexOf("Data inserted") != -1)
-    {
-      writeFile(SD, "/data.txt", "User_1"); // Only if successfully inserted, Data cleared
-    }
-  }
-  http.end();
-}
+//   if (httpCode == 200)
+//   {
+//     if (response.indexOf("Data inserted") != -1)
+//     {
+//       writeFile(SD, "/data.txt", "User_1"); // Only if successfully inserted, Data cleared
+//     }
+//   }
+//   http.end();
+// }
 
 
 // void connectWiFi()
@@ -219,19 +219,19 @@ void sendSDDataToServer()
 //   Serial.println(WiFi.localIP());
 // }
 
-void createAccessPoint(){
-  WiFiManager wm;
+// void createAccessPoint(){
+//   WiFiManager wm;
 
-  // Try to connect, if fails, start AP mode with config portal
-  if (!wm.autoConnect("ESP32_ConfigAP", "12345678")) {
-    Serial.println("Failed to connect and hit timeout");
-    ESP.restart();
-  }
+//   // Try to connect, if fails, start AP mode with config portal
+//   if (!wm.autoConnect("ESP32_ConfigAP", "12345678")) {
+//     Serial.println("Failed to connect and hit timeout");
+//     ESP.restart();
+//   }
 
-  Serial.println("Connected to Wi-Fi!");
-  Serial.print("IP Address: ");
-  Serial.println(WiFi.localIP());
-}
+//   Serial.println("Connected to Wi-Fi!");
+//   Serial.print("IP Address: ");
+//   Serial.println(WiFi.localIP());
+// }
 
 SimpleKalmanFilter kf_ax(0.1, 0.1, 0.5);
 SimpleKalmanFilter kf_ay(0.1, 0.1, 0.5);
@@ -242,11 +242,11 @@ SimpleKalmanFilter kf_speed(3, 3, 0.01);
 void setup()
 {
   Serial.begin(GPS_BAUD);
-  createAccessPoint();
+  // createAccessPoint();
   // connectWiFi();
 
   gpsSerial.begin(GPS_BAUD, SERIAL_8N1, RXD2, TXD2);
-  Serial.println("Serial 2 started at 9600 baud rate");
+  // Serial.println("Serial 2 started at 9600 baud rate");
 
   Wire.begin(I2C_SDA, I2C_SCL);
 
@@ -254,26 +254,38 @@ void setup()
 
   if (mpu.testConnection())
   {
-    Serial.println("MPU6050 connected successfully!");
+    // Serial.println("MPU6050 connected successfully!");
   }
   else
   {
-    Serial.println("MPU6050 connection failed!");
+    // Serial.println("MPU6050 connection failed!");
     while (1)
       ; // Stop if failed
   }
 
-  // SD card accessing
-  if (!SD.begin(CS))
-  {
-    Serial.println("Card Mount Failed");
-  }
+  Serial.print("ax_ms2:");
+  Serial.print(",");
+  Serial.print("ay_ms2:");
+  Serial.print(",");
+  Serial.print("az_ms2:");
+  Serial.print(",");
+  Serial.print("filtered_ax:");
+  Serial.print(",");
+  Serial.print("filtered_ay:");
+  Serial.print(",");
+  Serial.println("filtered_az:");
 
-  if (!SD.exists("/data.txt"))
-  {
-    Serial.println("Creating new file...");
-    writeFile(SD, "/data.txt", "");
-  }
+  // SD card accessing
+  // if (!SD.begin(CS))
+  // {
+  //   Serial.println("Card Mount Failed");
+  // }
+
+  // if (!SD.exists("/data.txt"))
+  // {
+  //   Serial.println("Creating new file...");
+  //   writeFile(SD, "/data.txt", "");
+  // }
 
   // String array = readFileToJsonArray();
   // Serial.print(array);
@@ -329,13 +341,31 @@ void loop()
   if (date == "2000-0-0")
     return;
 
-  logDataToSD(filtered_ax, filtered_ay, filtered_az, filtered_speed, date, timeStr);
-  count++;
-  if (count >= MAX_LINES)
-  {
-    sendSDDataToServer();
-    count = 0;
-  }
+  // logDataToSD(filtered_ax, filtered_ay, filtered_az, filtered_speed, date, timeStr);
+  // count++;
+  // if (count >= MAX_LINES)
+  // {
+  //   sendSDDataToServer();
+  //   count = 0;
+  // }
+
+  Serial.print("ax_ms2:");
+  Serial.print(ax_ms2);
+  Serial.print(",");
+  Serial.print("ay_ms2:");
+  Serial.print(ay_ms2);
+  Serial.print(",");
+  Serial.print("az_ms2:");
+  Serial.print(az_ms2);
+  Serial.print(",");
+  Serial.print("filtered_ax:");
+  Serial.print(filtered_ax);
+  Serial.print(",");
+  Serial.print("filtered_ay:");
+  Serial.print(filtered_ay);
+  Serial.print(",");
+  Serial.print("filtered_az:");
+  Serial.println(filtered_az);
 
   delay(500);
 }
